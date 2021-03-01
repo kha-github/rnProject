@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Image, TextInput } from 'react-native';
+import React, {Component} from 'react';
+import { SafeAreaView, StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 
 const MyStatusBar = ({backgroundColor, ...props}) => (
     <View style={[styles.statusBar, { backgroundColor }]}>
@@ -16,11 +16,17 @@ const TitleRectangle = (props) => (
     </View>
 );
 
-const CategoryCard = (props) => (
-    <View style={[styles.categoryRectangle, {marginLeft:10, marginRight: 10}]}>
-        <Text>{props.title}</Text>
-    </View>
-);
+const CategoryCard = (props) => {
+
+    return(
+        <TouchableOpacity style={[styles.categoryRectangle, {marginLeft: 10, marginRight: 10, justifyContent: 'center'}]}>
+            <Image
+                source={props.imgsrc}
+            />
+            <Text>{props.title}</Text>
+        </TouchableOpacity>
+    );
+};
 
 const LocationInputText = (props) => (
     <View>
@@ -31,36 +37,89 @@ const LocationInputText = (props) => (
     </View>
 );
 
+class Option extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            activeOption: this.props.options[0],
+        };
+    }
+    updateActiveOption = (activeOption) => {
+        this.setState({
+            activeOption,
+        });
+    };
+    render() {
+        return (
+            <View
+                style={{
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                }}
+            >
+                {this.props.options.map((option, index) => (
+                    <TouchableOpacity
+                        style={{
+                            width: 21,
+                            height: 21,
+                            marginLeft: 5,
+                            marginRight: 5,
+                            backgroundColor: this.state.activeOption === option ? '#F8B73C' : 'white',
+                            borderWidth: 2,
+                            borderColor: this.state.activeOption === option ? '#F8B73C' : '#B7B7BB',
+                            borderRadius: 25,
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                        onPress={() => {
+                            this.props.onChange(option);
+                            this.updateActiveOption(option);
+                        }}
+                    >
+                        <Text
+                            style={{
+                                color: this.state.activeOption === option ? 'white' : '#B7B7BB',
+                            }}
+                        >
+                            {option}
+                        </Text>
+                    </TouchableOpacity>
+                ))}
+            </View>
+        );
+    }
+}
+
 export default function HomeScreen() {
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
 
-            <MyStatusBar backgroundColor="#0D3664" barStyle="light-content"/>
+            <MyStatusBar backgroundColor="transparent" barStyle="light-content"/>
 
             <View style={styles.UpperSection}>
-                <View style={styles.section}>
+                <View style={[styles.section, {marginTop: 20}]}>
                     <Image
                         style={{width: 132.31, height: 24}}
                         source={require('../../assets/home/CTLogo.png')}
                     />
-                    <View style={styles.oval}>
+                    <View style={[styles.oval, {marginTop: 10}]}>
 
                     </View>
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={{justifyContent: 'center'}}>
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                        <TouchableOpacity style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginRight: 5, marginLeft: 5}}>
                             <Image
                                 style={{width: 35, height: 35}}
                                 source={require('../../assets/home/SchoolHome.png')}
                             />
                             <Text style={{color : 'white'}}>학교 홈</Text>
-                        </View>
-                        <View style={{justifyContent: 'center'}}>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginRight: 5, marginLeft: 5}}>
                             <Image
                                 style={{width: 35, height: 35}}
                                 source={require('../../assets/home/EClass.png')}
                             />
                             <Text style={{color : 'white'}}>E-Class</Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -70,9 +129,9 @@ export default function HomeScreen() {
                 <TitleRectangle title={"카테고리"} />
 
                 <View style={{flexDirection: 'row'}}>
-                    <CategoryCard title={"등교"}/>
-                    <CategoryCard title={"하교"}/>
-                    <CategoryCard title={"기타"}/>
+                    <CategoryCard imgsrc={require('../../assets/home/SchoolIcon.png')} title={"등교"}/>
+                    <CategoryCard imgsrc={require('../../assets/home/BusIcon.png')} title={"하교"}/>
+                    <CategoryCard imgsrc={require('../../assets/home/PenIcon.png')} title={"기타"}/>
                 </View>
 
                 <TitleRectangle title={"검색항목"} />
@@ -96,28 +155,46 @@ export default function HomeScreen() {
                     <View>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <LocationInputText hint={"출발지점을 입력해주세요"}/>
-                            <Image
-                                style={{width: 17.72, height: 17.72}}
-                                source={require('../../assets/home/SearchIcon.png')}
-                            />
+                            <TouchableOpacity>
+                                <Image
+                                    style={{width: 17.72, height: 17.72}}
+                                    source={require('../../assets/home/SearchIcon.png')}
+                                />
+                            </TouchableOpacity>
                         </View>
 
                         <View style={{height: 30}}/>
 
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <LocationInputText hint={"도착지점을 입력해주세요"}/>
-                            <Image
-                                style={{width: 17.72, height: 17.72}}
-                                source={require('../../assets/home/SearchIcon.png')}
-                            />
+                            <TouchableOpacity>
+                                <Image
+                                    style={{width: 17.72, height: 17.72}}
+                                    source={require('../../assets/home/SearchIcon.png')}
+                                />
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
 
-                <TitleRectangle title={"인원"} />
+                <View>
+                    <TitleRectangle title={"인원"} />
+                    <Option
+                        options={['2', '3', '4']}
+                        onChange={(option) => {
+                            console.log(option);
+                        }}
+                    />
+                </View>
+
+                <TouchableOpacity style={[styles.searchRoom, {marginTop: 10, marginBottom: 10}]}>
+                    <Text style={{color: 'white', fontsize: 14}}>방 검색하기</Text>
+                </TouchableOpacity>
+
+
 
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 
@@ -156,6 +233,17 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
+    searchRoom: {
+        width: 150,
+        height: 34,
+        backgroundColor: '#F8BD3C',
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#d9d9d9',
+        elevation: 6,
+    },
+
     locinputtext: {
         width: 243,
         height: 33,
@@ -170,9 +258,7 @@ export const styles = StyleSheet.create({
         width: 102,
         height: 101,
         backgroundColor: '#FFFFFF',
-        shadowColor: "#000000",
-        shadowOpacity: 0.16,
-        shadowOffset: { width: 2, height: 2 },
+        shadowColor: '#d9d9d9',
         borderRadius: 8,
         elevation: 6,
         alignItems: 'center',
