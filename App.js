@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import 'react-native-gesture-handler';
 import React from 'react';
 import { StyleSheet, Text, View, Image} from 'react-native';
@@ -28,7 +27,7 @@ const TabNavigator = createBottomTabNavigator({
     "채팅": {
       screen: ChatScreen,
     },
-    "택시 결제": {
+    "프리미엄": {
       screen: TaxiPayScreen,
     },
     "환경설정": {
@@ -44,7 +43,7 @@ const TabNavigator = createBottomTabNavigator({
           iconName = focused ? require('./assets/home/TabHomeActive.png') : require('./assets/home/TabHome.png');
         } else if (routeName === "채팅") {
           iconName = focused ? require('./assets/home/TabMessageActive.png') : require('./assets/home/TabMessage.png');
-        } else if (routeName === "택시 결제") {
+        } else if (routeName === "프리미엄") {
           iconName = focused ? require('./assets/home/TabVIPActive.png') : require('./assets/home/TabVIP.png');
         } else if (routeName === "환경설정") {
           iconName = focused ? require('./assets/home/TabSettingActive.png') : require('./assets/home/TabSetting.png');
